@@ -1,6 +1,8 @@
-import React, { useState, useCallback, useMemo } from 'react'
+import React, { useState, useCallback, useMemo, useEffect } from 'react'
 import { Container, AppBar, Typography, Toolbar, Grid, List, ListItem, ListItemText, Box, Button, TextField, Paper, Divider } from '@material-ui/core'
 import { Tv, Computer, DoubleArrow, Remove } from '@material-ui/icons'
+
+import Payment from './Payment'
 
 const App = () => {
   const [items, setItems] = useState([
@@ -45,10 +47,15 @@ const App = () => {
 
   const cartTotal = useMemo(() => {
     if (cart.length > 0) {
-      return cart.reduce((sum, cartItem) => sum + ((cartItem.price * cartItem.quantity) / 100), 0)
+      return cart.reduce((sum, cartItem) => sum + (cartItem.price * cartItem.quantity), 0)
     }
     return 0
   }, [cart])
+
+  useEffect(() => {
+    addToCart(1)
+    setIsPaying(true)
+  }, [])
 
   return (
     <div className="root">
@@ -151,11 +158,14 @@ const App = () => {
                       </ListItem>
                     </div>))}
                   {cart.length > 0 && (
-                    <ListItem>
-                      <Grid container justify="flex-end">
-                        <Typography>Total: R$ {cartTotal.toFixed(2)}</Typography>
-                      </Grid>
-                    </ListItem>
+                    <>
+                      <Divider/>
+                      <ListItem>
+                        <Grid container justify="flex-end">
+                          <Typography>Total: R$ {(cartTotal / 100).toFixed(2)}</Typography>
+                        </Grid>
+                      </ListItem>
+                    </>
                   )}
                 </List>
               </Paper>
@@ -169,7 +179,7 @@ const App = () => {
                         disabled={!cart.length}
                         onClick={() => setIsPaying(true)}
                       >
-                    Finalizar compra
+                        Finalizar compra
                       </Button>
                     </Box>
                   </Grid>
@@ -177,6 +187,7 @@ const App = () => {
               )}
             </Grid>
           </Grid>
+          {isPaying && <Payment valorEmCentavos={cartTotal} onCancel={() => setIsPaying(false)} />}
         </Container>
       </Box>
 

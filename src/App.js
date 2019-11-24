@@ -1,6 +1,26 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react'
-import { Container, AppBar, Typography, Toolbar, Grid, List, ListItem, ListItemText, Box, Button, TextField, Paper, Divider } from '@material-ui/core'
-import { Tv, Computer, DoubleArrow, Remove } from '@material-ui/icons'
+import {
+  Container,
+  AppBar,
+  Typography,
+  Toolbar,
+  Grid,
+  List,
+  ListItem,
+  ListItemText,
+  Box,
+  Button,
+  IconButton,
+  TextField,
+  Paper,
+  Divider
+} from '@material-ui/core'
+import {
+  Tv,
+  Computer,
+  DoubleArrow,
+  Remove
+} from '@material-ui/icons'
 
 import Payment from './Payment'
 
@@ -94,9 +114,9 @@ const App = () => {
                               <Box mr={2}>
                                 <Typography>R$ {(item.price / 100).toFixed(2)}</Typography>
                               </Box>
-                              <Button disabled={isPaying} onClick={() => addToCart(item.id)}>
+                              <IconButton disabled={isPaying} onClick={() => addToCart(item.id)}>
                                 <DoubleArrow/>
-                              </Button>
+                              </IconButton>
                             </Grid>
                           </Grid>
                         </Grid>
@@ -144,9 +164,9 @@ const App = () => {
                               <Box mx={2}>
                                 <Typography>R$ {((cartItem.price * cartItem.quantity) / 100).toFixed(2)}</Typography>
                               </Box>
-                              <Button disabled={isPaying} onClick={() => removeFromCart(cartItem.id)}>
+                              <IconButton disabled={isPaying} onClick={() => removeFromCart(cartItem.id)}>
                                 <Remove color="error"/>
-                              </Button>
+                              </IconButton>
                             </Grid>
                           </Grid>
                         </Grid>

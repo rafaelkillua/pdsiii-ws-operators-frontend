@@ -1,7 +1,29 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect, useCallback } from 'react'
-import { Container, Grid, Box, TextField, Select, FormControl, Input, Paper, Typography, InputLabel, MenuItem, Button, CircularProgress } from '@material-ui/core'
+import {
+  Container,
+  Grid,
+  Box,
+  TextField,
+  Select,
+  FormControl,
+  Input,
+  Paper,
+  Typography,
+  InputLabel,
+  MenuItem,
+  Button,
+  IconButton,
+  CircularProgress,
+  Snackbar,
+  SnackbarContent
+} from '@material-ui/core'
+import { Close, Error, CheckCircle } from '@material-ui/icons'
+import { makeStyles } from '@material-ui/core/styles'
+import { green } from '@material-ui/core/colors'
 import MaskedInput from 'react-text-mask'
+
+import PaymentService from './services/ws-operators'
 
 // "numero_cartao": "1111.1111.1111.1111",
 // "nome_cliente": "JOSE DA SILVA",
@@ -22,10 +44,12 @@ const Payment = props => {
     bandeira: null,
     parcelas: 1,
     cod_loja: 'loja-01',
-    cod_op: 'op-01'
+    operadora: 'op-01'
   })
 
   const [loading, setLoading] = useState(false)
+  const [snackbarMessage, setSnackbarMessage] = useState(null)
+  const snackbarClasses = snackbarStyles()
 
   const handleFormChange = evt => {
     evt.persist()
@@ -50,13 +74,17 @@ const Payment = props => {
     }
   }, [form.numero_cartao])
 
-  const submit = useCallback(() => {
+  const submit = useCallback(async () => {
     try {
       setLoading(true)
+      await PaymentService.pay(form.operadora, form)
+      setSnackbarMessage({ type: 'success', message: 'Compra efetuada com sucesso!' })
     } catch (error) {
-
+      setSnackbarMessage({ type: 'error', message: error.response.data })
+    } finally {
+      setLoading(false)
     }
-  }, [])
+  }, [form])
 
   return (
     <Box mt={4}>
@@ -67,6 +95,28 @@ const Payment = props => {
               <Grid item xs={12} sm={8} md={6} style={{ width: '100%' }}>
                 <Grid container direction="column" alignItems="center">
                   <Typography variant="h6">Dados de pagamento</Typography>
+                  <Box mb={2} width="100%">
+                    <FormControl fullWidth>
+                      <TextField
+                        name="operadora"
+                        label="Código da operadora"
+                        value={form.operadora}
+                        onChange={handleFormChange}
+                        fullWidth
+                      />
+                    </FormControl>
+                  </Box>
+                  <Box mb={2} width="100%">
+                    <FormControl fullWidth>
+                      <TextField
+                        name="cod_loja"
+                        label="Código da loja"
+                        value={form.cod_loja}
+                        onChange={handleFormChange}
+                        fullWidth
+                      />
+                    </FormControl>
+                  </Box>
                   <Box mb={2} width="100%">
                     <FormControl fullWidth>
                       <InputLabel htmlFor="numero_cartao">Número do cartão</InputLabel>
@@ -135,7 +185,7 @@ const Payment = props => {
                       <Button
                         variant="contained"
                         color={loading ? 'secondary' : 'primary'}
-                        onClick={submit}
+                        onClick={loading ? () => {} : submit}
                       >
                         {loading ? <CircularProgress size={20} /> : 'Pagar'}
                       </Button>
@@ -147,9 +197,61 @@ const Payment = props => {
           </Container>
         </Box>
       </Paper>
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left'
+        }}
+        open={snackbarMessage !== null}
+        autoHideDuration={115000}
+        onClose={() => setSnackbarMessage(null)}
+      >
+        <SnackbarContent
+          className={snackbarMessage ? (snackbarMessage.type === 'error' ? snackbarClasses.error : snackbarClasses.success) : ''}
+          aria-describedby='message-id'
+          message={
+            <span id="message-id" className={snackbarClasses.message}>
+              {snackbarMessage
+                ? (snackbarMessage.type === 'error'
+                  ? <Error className={snackbarClasses.icon}/>
+                  : <CheckCircle className={snackbarClasses.icon}/>
+                ) : null}
+              {snackbarMessage && `${snackbarMessage.message.resposta}: ${snackbarMessage.message.detalhes}`}
+            </span>
+          }
+          action={[
+            <IconButton
+              key="close"
+              aria-label="close"
+              color="inherit"
+              onClick={() => setSnackbarMessage(null)}
+            >
+              <Close />
+            </IconButton>
+          ]}
+        />
+      </Snackbar>
     </Box>
   )
 }
+
+const snackbarStyles = makeStyles(theme => ({
+  success: {
+    backgroundColor: green[600]
+  },
+  error: {
+    backgroundColor: theme.palette.error.dark
+  },
+  message: {
+    display: 'flex',
+    alignItems: 'center'
+  },
+  icon: {
+    fontSize: 20,
+    opacity: 0.9,
+    marginRight: theme.spacing(1)
+  }
+}))
 
 const CardTextInput = props => {
   const { inputRef, ...other } = props

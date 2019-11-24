@@ -52,11 +52,6 @@ const App = () => {
     return 0
   }, [cart])
 
-  useEffect(() => {
-    addToCart(1)
-    setIsPaying(true)
-  }, [])
-
   return (
     <div className="root">
       <AppBar position="static">

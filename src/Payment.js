@@ -84,7 +84,7 @@ const Payment = props => {
       setSnackbarMessage({ type: 'error', message: error.response.data })
       setLoading(false)
     }
-  }, [form])
+  }, [form, valorEmCentavos])
 
   return (
     <Box mt={4}>

@@ -19,7 +19,14 @@ import {
   Tv,
   Computer,
   DoubleArrow,
-  Remove
+  Remove,
+  AccessAlarm,
+  StayPrimaryPortrait,
+  AirplanemodeActive,
+  AttachFile,
+  HeadsetMic,
+  Casino,
+  Kitchen
 } from '@material-ui/icons'
 
 import Payment from './Payment'
@@ -30,14 +37,63 @@ const App = () => {
       id: 1,
       name: 'TV 4k',
       icon: Tv,
-      price: 200000,
+      price: 20000,
       quantity: 1
     },
     {
       id: 2,
       name: 'PC gamer',
       icon: Computer,
-      price: 420000,
+      price: 42000,
+      quantity: 1
+    },
+    {
+      id: 3,
+      name: 'Smartphone',
+      icon: StayPrimaryPortrait,
+      price: 12300,
+      quantity: 1
+    },
+    {
+      id: 4,
+      name: 'Alarme smart',
+      icon: AccessAlarm,
+      price: 9800,
+      quantity: 1
+    },
+    {
+      id: 5,
+      name: 'Avião smart',
+      icon: AirplanemodeActive,
+      price: 84000,
+      quantity: 1
+    },
+    {
+      id: 6,
+      name: 'Clipe de papel smart',
+      icon: AttachFile,
+      price: 990,
+      quantity: 1
+    },
+    {
+      id: 7,
+      name: 'Headset gamer',
+      icon: HeadsetMic,
+      price: 11200,
+      quantity: 1
+    },
+    {
+      id: 8,
+      name: 'Dado gamer',
+      icon: Casino,
+      price: 1500,
+      quantity: 1
+    },
+    {
+      id: 9,
+      name: 'Geladeira smart',
+      icon: Kitchen,
+      price: 31000,
       quantity: 1
     }
   ])

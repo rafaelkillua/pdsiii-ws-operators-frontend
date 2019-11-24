@@ -77,11 +77,11 @@ const Payment = props => {
   const submit = useCallback(async () => {
     try {
       setLoading(true)
-      await PaymentService.pay(form.operadora, form)
-      setSnackbarMessage({ type: 'success', message: 'Compra efetuada com sucesso!' })
+      await PaymentService.pay(form.operadora, { ...form, valor_em_centavos: valorEmCentavos })
+      setSnackbarMessage({ type: 'success', message: { resposta: 'Sucesso', detalhes: 'Compra efetuada com sucesso!' } })
+      setTimeout(() => window.location.reload(), 10000)
     } catch (error) {
       setSnackbarMessage({ type: 'error', message: error.response.data })
-    } finally {
       setLoading(false)
     }
   }, [form])
@@ -203,7 +203,7 @@ const Payment = props => {
           horizontal: 'left'
         }}
         open={snackbarMessage !== null}
-        autoHideDuration={115000}
+        autoHideDuration={10000}
         onClose={() => setSnackbarMessage(null)}
       >
         <SnackbarContent

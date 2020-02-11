@@ -246,7 +246,7 @@ const App = () => {
                     <Box mt={4}>
                       <Button
                         variant="contained"
-                        color="primary"
+                        color="secondary"
                         disabled={!cart.length}
                         onClick={() => setIsPaying(true)}
                       >

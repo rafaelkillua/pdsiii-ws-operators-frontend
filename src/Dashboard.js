@@ -24,7 +24,7 @@ import {
   StayPrimaryPortrait,
   AirplanemodeActive,
   AttachFile,
-  HeadsetMic,
+  Headset,
   Casino,
   Kitchen
 } from '@material-ui/icons'
@@ -78,7 +78,7 @@ const App = () => {
     {
       id: 7,
       name: 'Headset gamer',
-      icon: HeadsetMic,
+      icon: Headset,
       price: 11200,
       quantity: 1
     },
